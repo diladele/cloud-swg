@@ -1,4 +1,4 @@
 #
-# for development run backup every hour at HH:05 - in future let it run daily at say 01:10 am
+# runs daily at 01:10 am
 #
-5 * * * * proxy /bin/bash /opt/cloud-swg-admin/bin/backup.sh 2>&1 >/opt/cloud-swg-admin/var/log/"backup_$(date +\%Y\%m\%d_\%H\%M\%S).log"
+10 1 * * * proxy /bin/bash /opt/cloud-swg-admin/bin/backup.sh 2>&1 >/opt/cloud-swg-admin/var/log/"backup_$(date +\%Y\%m\%d_\%H\%M\%S).log"
