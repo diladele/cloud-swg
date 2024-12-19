@@ -2,7 +2,7 @@
     {
         "id": "example_app1",
         "name": "Example App 1",
-        "description": "",
+        "description": "This app1 accesses example.com and all its subdomains",
         "priority": 0,
         "url": "https://www.example.com",
         "detection": {
@@ -21,7 +21,7 @@
     {
         "id": "example_app2",
         "name": "Example App 2",
-        "description": "",
+        "description": "This app1 accesses example.net and all its subdomains",
         "priority": 0,
         "url": "https://www.example.net",
         "detection": {
