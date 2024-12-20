@@ -6,6 +6,9 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+# update and upgrade just in case again
+apt update && apt -y upgrade
+
 # install various required python packages from the system repo
 apt install -y python3-dev python3-openssl zlib1g-dev libssl-dev python3.10-venv
 

@@ -8,7 +8,7 @@ fi
 
 # configure params
 MAJOR="6.0.0"
-MINOR="062E"
+MINOR="9519"
 ARCH="amd64"
 
 # download
