@@ -7,19 +7,12 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # install core modules of web safety
-pushd core
+pushd scripts
 bash 02_squid.sh && \
 bash 03_clamav.sh && \
 bash 04_websafety.sh && \
-bash 05_integrate.sh
-popd
-
-# install web safety ui
-pushd ui
-bash 01_apache.sh && \
-bash 02_webui.sh && \
-bash 03_venv.sh && \
-bash 04_integrate.sh
+bash 05_integrate.sh && \
+bash 06_node.sh
 popd
 
 # tell 
