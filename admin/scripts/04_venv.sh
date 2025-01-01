@@ -10,7 +10,7 @@ fi
 apt update && apt -y upgrade
 
 # install various required python packages from the system repo
-apt install -y python3-dev python3-openssl zlib1g-dev libssl-dev python3.10-venv
+apt install -y python3-dev python3-openssl zlib1g-dev libssl-dev python3.12-venv
 
 # create a virtual environment
 python3 -m venv /opt/cloud-swg-admin/env
