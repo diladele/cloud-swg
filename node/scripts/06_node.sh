@@ -10,11 +10,11 @@ fi
 apt install -y python3-pip
 
 # install all required packages
-pip install psutils
+pip install psutil
 
 # install web safety core daemons
 MAJOR="6.0.0"
-MINOR="4612"
+MINOR="B040"
 ARCH="amd64"
 
 # download
