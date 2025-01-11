@@ -1,4 +1,0 @@
-#
-# runs daily at 01:10 am
-#
-10 1 * * * proxy /bin/bash /opt/cloud-swg-admin/bin/backup.sh 2>&1 >/opt/cloud-swg-admin/var/log/"backup_$(date +\%Y\%m\%d_\%H\%M\%S).log"

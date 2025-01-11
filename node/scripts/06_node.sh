@@ -6,9 +6,15 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+# for now python scripts run on system level
+apt install -y python3-pip
+
+# install all required packages
+pip install psutils
+
 # install web safety core daemons
 MAJOR="6.0.0"
-MINOR="D1A8"
+MINOR="4612"
 ARCH="amd64"
 
 # download
