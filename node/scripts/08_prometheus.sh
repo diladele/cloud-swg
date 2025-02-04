@@ -52,9 +52,9 @@ Type=simple
 Restart=on-failure
 RestartSec=5s
 ExecStart=/usr/local/bin/prometheus \
-    --enable-feature=agent \
+    --agent \
     --config.file /etc/prometheus/prometheus.yml \
-    --storage.tsdb.path /var/lib/prometheus/ \
+    --storage.agent.path=/var/lib/prometheus \
     --web.console.templates=/etc/prometheus/consoles \
     --web.console.libraries=/etc/prometheus/console_libraries \
     --web.listen-address=0.0.0.0:9090 \

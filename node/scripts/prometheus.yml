@@ -66,3 +66,18 @@ scrape_configs:
     - source_labels: [__address__]
       target_label: instance
       regex: (.*)[:].+
+
+#
+# When running prometheus in Agent mode, remote-write is required.
+#
+remote_write:
+  # Agent is able to run with a invalid remote-write URL, but, of course, will fail to push timeseries.
+  - url: "http://192.168.5.20:9090/api/v1/write"
+
+  # from https://docs.stackstate.com/metrics/advanced-metrics/k8s-prometheus-remote-write
+  #  headers:
+  #    sts-api-key: <API Key>
+
+  #basic_auth:
+  #  username: apikey
+  #  password: <API Key>
