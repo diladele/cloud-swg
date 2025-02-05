@@ -6,7 +6,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-# install lts version of prometheus
+# install this version of exporter
 VERSION="1.8.2"
 
 # download
@@ -27,9 +27,6 @@ popd
 # and check exporter is installed
 node_exporter --version
 
-# now we will configure exporter to run as a system daemon, add a dedicated user
-useradd -rs /bin/false node_exporter
-
 # create systemctl service file
 cat >/etc/systemd/system/node_exporter.service << EOL
 [Unit]
@@ -38,12 +35,15 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-User=node_exporter
-Group=node_exporter
+User=proxy
+Group=proxy
 Type=simple
 Restart=on-failure
 RestartSec=5s
-ExecStart=/usr/local/bin/node_exporter
+StandardOutput=append:/opt/cloud-swg-node/var/log/exporter.log
+StandardError=append:/opt/cloud-swg-node/var/log/exporter.log
+ExecStart=/usr/local/bin/node_exporter \
+   --web.listen-address=127.0.0.1:9100
 
 [Install]
 WantedBy=multi-user.target
@@ -56,4 +56,3 @@ systemctl restart node_exporter
 
 # good then
 systemctl status node_exporter
-

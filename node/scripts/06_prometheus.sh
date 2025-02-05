@@ -6,7 +6,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-# install lts version of prometheus
+# install this version of prometheus
 VERSION="3.1.0"
 
 # download
@@ -32,32 +32,31 @@ popd
 # and check prometheus is installed
 prometheus --version
 
-# now we will configure prometheus to run as a system daemon, add a dedicated user
-useradd -rs /bin/false prometheus
-
-# and make it owner
-chown -R prometheus: /etc/prometheus /var/lib/prometheus
+# our prometheus will run as proxy user as all our daemons
+chown -R proxy:proxy /etc/prometheus /var/lib/prometheus
 
 # create systemctl service file
 cat >/etc/systemd/system/prometheus.service << EOL
 [Unit]
-Description=Prometheus
+Description=Prometheus Agent
 Wants=network-online.target
 After=network-online.target
 
 [Service]
-User=prometheus
-Group=prometheus
+User=proxy
+Group=proxy
 Type=simple
 Restart=on-failure
 RestartSec=5s
+StandardOutput=append:/opt/cloud-swg-node/var/log/prometheus.log
+StandardError=append:/opt/cloud-swg-node/var/log/prometheus.log
 ExecStart=/usr/local/bin/prometheus \
     --agent \
     --config.file /etc/prometheus/prometheus.yml \
     --storage.agent.path=/var/lib/prometheus \
     --web.console.templates=/etc/prometheus/consoles \
     --web.console.libraries=/etc/prometheus/console_libraries \
-    --web.listen-address=0.0.0.0:9090 \
+    --web.listen-address=127.0.0.1:9090 \
     --web.enable-lifecycle \
     --log.level=info
 
@@ -72,4 +71,3 @@ systemctl restart prometheus
 
 # good then
 systemctl status prometheus
-
