@@ -14,7 +14,7 @@ pip install psutil
 
 # install web safety core daemons
 MAJOR="6.0.0"
-MINOR="5AAA"
+MINOR="91AF"
 ARCH="amd64"
 
 # download
