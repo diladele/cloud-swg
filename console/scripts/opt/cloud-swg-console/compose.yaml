@@ -21,9 +21,10 @@ services:
       - db
       - prometheus
       - loki
-      - grafana      
+      - grafana
     env_file: ".env"
     volumes:
+      # repository
       - repo:/opt/cloud-swg-repo
       - spool:/opt/cloud-swg-spool
       # for development also map the local folders
@@ -41,8 +42,9 @@ services:
       - db
     env_file: ".env"
     volumes:
+      # repository
       - repo:/opt/cloud-swg-repo
-      # for development map the local folder to volume
+      # map the local folder to volume
       #- ./opt/cloud-swg-admin/app:/opt/cloud-swg-admin/app
       #- ./opt/cloud-swg-admin/bin:/opt/cloud-swg-admin/bin
 
@@ -66,7 +68,8 @@ services:
   # prometheus server for collecting metrics from nodes
   #
   prometheus:
-    image: "prom/prometheus:latest"
+    #image: "prom/prometheus:latest"
+    image: "diladele/cloud-swg-admin:6.0-prometheus"
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -77,26 +80,28 @@ services:
       - 9090:9090
     volumes:
       - prometheus:/prometheus
-      - ./etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      #- ./etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       
   #
   # loki server for collecting logs from nodes
   #
   loki:
-    image: "grafana/loki:latest"
+    #image: "grafana/loki:latest"
+    image: "diladele/cloud-swg-admin:6.0-loki"
     command:
       - '--config.file=/etc/loki/loki.yml'            
     ports:
       - 3100:3100
     volumes:
       - loki:/loki
-      - ./etc/loki/loki.yml:/etc/loki/loki.yml
+      #- ./etc/loki/loki.yml:/etc/loki/loki.yml
       
   #
   # to render data of prometheus we use grafana for now
   # 
   grafana:
-    image: grafana/grafana-enterprise
+    #image: grafana/grafana-enterprise
+    image: "diladele/cloud-swg-admin:6.0-grafana"
     restart: unless-stopped
     ports:
      - '3000:3000'
@@ -111,8 +116,8 @@ services:
     environment:
       - "POSTGRES_HOST_AUTH_METHOD=trust"
     # fore remote development
-    #ports:
-    #  - 5432:5432
+    ports:
+      - 5432:5432
     volumes:
       - postgres:/var/lib/postgresql/data
 
@@ -138,3 +143,5 @@ volumes:
   
   # grafana storage
   grafana:
+
+

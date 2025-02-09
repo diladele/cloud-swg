@@ -6,9 +6,9 @@
 # is empty for now - after this script database will be fully initialized
 #
 
-# comment the following if you need to actuall seed the empty database
-# because if you run this script on a live database you will get problems
-exit
+# 
+# DO NOT RUN THIS SCRIPT ON YOUR PRODUCTION DATABASE - ONLY ON FIRST DEPLOYMENT
+#
 
 # first initialize the empty database
 docker compose exec app python manage.py migrate
