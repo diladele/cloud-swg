@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# all packages are installed as root
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+
+# install this version of prometheus
+VERSION="3.1.0"
+
+# download
+wget https://github.com/prometheus/prometheus/releases/download/v${VERSION}/prometheus-${VERSION}.linux-amd64.tar.gz
+
+# extract contents and remove original archive
+tar xvfz prometheus-${VERSION}.linux-amd64.tar.gz && rm prometheus-${VERSION}.linux-amd64.tar.gz
+
+# create folders to install
+mkdir /etc/prometheus /var/lib/prometheus
+
+# change into extracted folder
+pushd prometheus-${VERSION}.linux-amd64
+
+# move to bin and etc
+mv prometheus promtool /usr/local/bin/
+mv prometheus.yml /etc/prometheus/prometheus.yml
+mv consoles/ console_libraries/ /etc/prometheus/
+
+# return to parent folder
+popd
+
+# and check prometheus is installed
+prometheus --version
+
+# prometheus will run as proxy user as all our daemons
+chown -R proxy:proxy /etc/prometheus /var/lib/prometheus
+
+# create systemctl service file
+cat >/etc/systemd/system/prometheus.service << EOL
+[Unit]
+Description=Prometheus Agent
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=proxy
+Group=proxy
+Type=simple
+Restart=on-failure
+RestartSec=5s
+StandardOutput=append:/opt/cloud-swg-node/var/log/prometheus.log
+StandardError=append:/opt/cloud-swg-node/var/log/prometheus.log
+ExecStart=/usr/local/bin/prometheus \
+    --agent \
+    --config.file /etc/prometheus/prometheus.yml \
+    --storage.agent.path=/var/lib/prometheus \
+    --web.console.templates=/etc/prometheus/consoles \
+    --web.console.libraries=/etc/prometheus/console_libraries \
+    --web.listen-address=127.0.0.1:9090 \
+    --web.enable-lifecycle \
+    --log.level=info
+
+[Install]
+WantedBy=multi-user.target
+EOL
+
+# reload the systemd, enable the service and check its status
+systemctl daemon-reload
+systemctl enable prometheus
+systemctl restart prometheus
+
+# good then
+systemctl status prometheus
