@@ -22,6 +22,9 @@ cp etc/cron.d/cloud_swg_console_backup /etc/cron.d
 cp etc/systemd/system/cloud-swg-console.service  /etc/systemd/system/
 cp etc/systemd/system/cloud-swg-issue.service  /etc/systemd/system/
 
+# and make it executable
+chmod 755 /opt/cloud-swg-console/bin/issue.sh
+
 # tell systemd to reload
 systemctl daemon-reload
 
