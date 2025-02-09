@@ -1,4 +1,4 @@
 # cloud-swg
 
-Cloud Secure Web Gateway - node vm
+Cloud Secure Web Gateway virtual machines, node and console.
 
