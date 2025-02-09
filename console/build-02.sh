@@ -10,7 +10,8 @@ fi
 pushd scripts
 bash 02_docker.sh && \
 bash 03_nginx.sh && \
-bash 04_console.sh
+bash 04_console.sh && \
+bash 05_seed.sh
 popd
 
 # tell 
