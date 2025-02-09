@@ -1,4 +1,3 @@
 # cloud-swg
 
-Cloud Secure Web Gateway virtual machines, node and console.
-
+Scripts to build Cloud Secure Web Gateway virtual machines, both node and console.
