@@ -32,7 +32,7 @@ popd
 # and check prometheus is installed
 prometheus --version
 
-# our prometheus will run as proxy user as all our daemons
+# prometheus will run as proxy user as all our daemons
 chown -R proxy:proxy /etc/prometheus /var/lib/prometheus
 
 # create systemctl service file
