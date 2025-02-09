@@ -25,7 +25,7 @@ fi
 # for POC we still allow root login for ssh
 sed -i "s/#\{0,1\}PermitRootLogin *.*$/PermitRootLogin yes/g" /etc/ssh/sshd_config
 
-# enable and start issue updating service
+# enable and start login banner updating service
 systemctl enable cloud-swg-issue && systemctl start cloud-swg-issue
 
 # reset system root password to match documented one
@@ -43,7 +43,7 @@ passwd builder -l
 # tell 
 echo "SUCCESS"
 echo "SUCCESS"
-echo "SUCCESS --- Cloud SWG Virtual Appliance is ready, do NOT REBOOT ANY MORE, just export as VA --"
+echo "SUCCESS --- Cloud SWG Node appliance is ready, do NOT REBOOT ANY MORE, just export as VA --"
 # cat /opt/websafety/etc/license.pem | grep "Not After"
 echo "SUCCESS"
 echo "SUCCESS"
