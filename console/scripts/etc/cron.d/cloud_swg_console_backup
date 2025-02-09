@@ -1,0 +1,4 @@
+#
+# runs daily at 01:10 am as root
+#
+10 1 * * * root /bin/bash /opt/cloud-swg-console/bin/backup/runme.sh >/opt/cloud-swg-console/var/log/backup.log 2>&1
