@@ -1,0 +1,14 @@
+[Unit]
+Description=Cloud SWG Console
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/cloud-swg-console
+ExecStart=/bin/bash -c "docker compose -f compose.yaml up --detach"
+ExecStop=/bin/bash -c "docker compose -f compose.yaml down"
+
+[Install]
+WantedBy=multi-user.target

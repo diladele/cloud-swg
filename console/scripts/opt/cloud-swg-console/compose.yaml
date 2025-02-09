@@ -1,0 +1,147 @@
+services:
+
+  #
+  # nginx serving plain HTTP for the static files and redirecting other requests to the app
+  #
+  www:
+    image: "diladele/cloud-swg-admin:6.0-www"
+    depends_on:
+      - app
+    ports:
+      - 8080:80
+
+  #
+  # main django app served by the gunicorn on port 8000
+  #
+  app:
+    image: "diladele/cloud-swg-admin:6.0-app"
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+      - prometheus
+      - loki
+      - grafana
+    env_file: ".env"
+    volumes:
+      # repository
+      - repo:/opt/cloud-swg-repo
+      - spool:/opt/cloud-swg-spool
+      # for development also map the local folders
+      #- ./opt/cloud-swg-admin/app:/opt/cloud-swg-admin/app
+      # when running collect static also map this folder
+      #- ./opt/cloud-swg-static:/opt/cloud-swg-static
+
+  #
+  # realtime statistics app, runs periodically over logs files in the repo folder
+  #
+  realtime:
+    image: "diladele/cloud-swg-admin:6.0-traffic"
+    command: python reporter.py --realtime
+    depends_on:
+      - db
+    env_file: ".env"
+    volumes:
+      # repository
+      - repo:/opt/cloud-swg-repo
+      # map the local folder to volume
+      #- ./opt/cloud-swg-admin/app:/opt/cloud-swg-admin/app
+      #- ./opt/cloud-swg-admin/bin:/opt/cloud-swg-admin/bin
+
+  #
+  # history statistics app, runs periodically over logs files in the repo folder
+  #
+  history:
+    image: "diladele/cloud-swg-admin:6.0-traffic"
+    command: python reporter.py
+    depends_on:
+      - db
+    env_file: ".env"
+    volumes:
+      # repository
+      - repo:/opt/cloud-swg-repo
+      # map the local folder to volume
+      #- ./opt/cloud-swg-admin/app:/opt/cloud-swg-admin/app
+      #- ./opt/cloud-swg-admin/bin:/opt/cloud-swg-admin/bin
+
+  #
+  # prometheus server for collecting metrics from nodes
+  #
+  prometheus:
+    #image: "prom/prometheus:latest"
+    image: "diladele/cloud-swg-admin:6.0-prometheus"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-remote-write-receiver'
+      #- '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      #- '--web.console.templates=/usr/share/prometheus/consoles'      
+    ports:
+      - 9090:9090
+    volumes:
+      - prometheus:/prometheus
+      #- ./etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      
+  #
+  # loki server for collecting logs from nodes
+  #
+  loki:
+    #image: "grafana/loki:latest"
+    image: "diladele/cloud-swg-admin:6.0-loki"
+    command:
+      - '--config.file=/etc/loki/loki.yml'            
+    ports:
+      - 3100:3100
+    volumes:
+      - loki:/loki
+      #- ./etc/loki/loki.yml:/etc/loki/loki.yml
+      
+  #
+  # to render data of prometheus we use grafana for now
+  # 
+  grafana:
+    #image: grafana/grafana-enterprise
+    image: "diladele/cloud-swg-admin:6.0-grafana"
+    restart: unless-stopped
+    ports:
+     - '3000:3000'
+    volumes:
+     - grafana:/var/lib/grafana
+      
+  #
+  #
+  #
+  db:
+    image: postgres:15
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    # fore remote development
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+#
+#
+#
+volumes:
+
+  # database persistance volume
+  postgres:
+  
+  # file repository
+  repo:
+
+  # spool with for example apps definitions
+  spool:
+
+  # prometheus metrics
+  prometheus:
+  
+  # loki
+  loki:
+  
+  # grafana storage
+  grafana:
+
+

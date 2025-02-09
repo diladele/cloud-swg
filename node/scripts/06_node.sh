@@ -12,7 +12,7 @@ apt install -y python3-pip
 # install all required packages
 pip install psutil
 
-# install web safety core daemons
+# install swg node binary
 MAJOR="6.0.0"
 MINOR="91AF"
 ARCH="amd64"
@@ -23,5 +23,5 @@ wget https://packages.diladele.com/cloud-swg-node/$MAJOR.$MINOR/$ARCH/release/ub
 # install
 dpkg --install cloud-swg-node-$MAJOR.${MINOR}_$ARCH.deb
 
-# node daemon runs using the same user as squid
+# run it using the same user as squid
 chown -R proxy:proxy /opt/cloud-swg-node
