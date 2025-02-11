@@ -14,7 +14,7 @@ pip install psutil
 
 # install swg node binary
 MAJOR="6.0.0"
-MINOR="91AF"
+MINOR="17FA"
 ARCH="amd64"
 
 # download
