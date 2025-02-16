@@ -9,11 +9,14 @@ fi
 # install nginx with some other tools
 apt -y install mc htop net-tools nginx
 
-# copy nginx config and certificates
+# copy nginx config and certificates generation script
 cp etc/nginx/sites-available/default     /etc/nginx/sites-available/
-cp etc/nginx/sites-available/console.key /etc/nginx/sites-available/
-cp etc/nginx/sites-available/console.crt /etc/nginx/sites-available/
 cp etc/nginx/sites-available/generate.sh /etc/nginx/sites-available/
+
+# change into nginx and regenerate the self signed cert
+pushd /etc/nginx/sites-available/
+bash generate.sh
+popd
 
 # and restart
 systemctl restart nginx

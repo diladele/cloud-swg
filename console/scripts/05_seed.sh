@@ -6,12 +6,6 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-# 
-# NOTE - this script seeds the empty virtual machine with some initial data, so
-#        it is supposed to be run only once, usually when we build the virtual
-#        machine for the distribution
-#
-
 # stop the console service
 systemctl stop cloud-swg-console
 
