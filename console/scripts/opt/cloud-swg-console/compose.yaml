@@ -115,7 +115,7 @@ services:
     image: postgres:15
     environment:
       - "POSTGRES_HOST_AUTH_METHOD=trust"
-    # fore remote development
+    # for remote development
     ports:
       - 5432:5432
     volumes:
@@ -126,7 +126,7 @@ services:
 #
 volumes:
 
-  # database persistance volume
+  # database persistence volume
   postgres:
   
   # file repository
